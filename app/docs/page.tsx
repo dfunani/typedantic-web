@@ -12,8 +12,7 @@ export default function DocsPage() {
     >
       <p>
         Three packages. Write against <code>typedantic</code>. The engine lives in{" "}
-        <code>@typedantic/core</code>. Environment config is{" "}
-        <code>typedantic-settings</code>.
+        <code>@typedantic/core</code>. Environment config is <code>typedantic-settings</code>.
       </p>
       <CodeBlock code={examples.user} />
       <h2>What this site covers</h2>
