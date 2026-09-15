@@ -68,7 +68,7 @@ class User extends BaseModel {
       </ul>
       <h2>Nested models</h2>
       <p>
-        <code>@Field({ type: Address })</code> inlines Address’s <code>model-fields</code> schema.
+        <code>{`@Field({ type: Address })`}</code> inlines Address’s <code>model-fields</code> schema.
         Nested results are plain objects, not nested class instances.
       </p>
       <h2>Defaults</h2>

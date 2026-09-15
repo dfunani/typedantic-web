@@ -14,7 +14,7 @@ export default function FieldsPage() {
       <h2>Always pass type</h2>
       <p>
         <code>design:type</code> cannot tell int from number, loses array item types, and is often
-        missing under Vitest. Write <code>@Field({ type: String })</code> even if the property is
+        missing under Vitest. Write <code>{`@Field({ type: String })`}</code> even if the property is
         already typed.
       </p>
       <h2>int vs number</h2>
