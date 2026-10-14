@@ -14,11 +14,15 @@ export default function DownloadPage() {
         Requires Node {site.node} and <span className="font-mono text-paper">reflect-metadata</span>.
       </p>
 
-      <h2 className="display mt-12 text-2xl text-paper">From a registry</h2>
+      <h2 className="display mt-12 text-2xl text-paper">From npm</h2>
       <p className="mt-3 mb-5 text-sm text-paper-dim">
-        Installs <code className="font-mono text-paper">typedantic</code> and its core engine.
+        Installs <code className="font-mono text-paper">@typedantic/model</code> (pulls in core).
       </p>
       <InstallTabs />
+      <p className="mt-4 text-sm text-paper-dim">
+        Optional:{" "}
+        <code className="font-mono text-paper">bun add @typedantic/settings</code>
+      </p>
 
       <h2 className="display mt-12 text-2xl text-paper">From Git</h2>
       <CodeBlock
@@ -33,7 +37,7 @@ bun run build`}
         <table className="w-full text-sm">
           <tbody>
             {[
-              ["npm", "typedantic, @typedantic/core, typedantic-settings"],
+              ["npm", "@typedantic/core, @typedantic/model, @typedantic/settings"],
               ["Repository", site.githubShort],
               ["License", site.license],
               ["Runtime", `Node ${site.node}`],
@@ -52,8 +56,16 @@ bun run build`}
 
       <p className="mt-8 text-sm text-paper-dim">
         Package pages:{" "}
-        <a className="text-copper-bright hover:underline" href={site.npm}>
-          npmjs.com/package/typedantic
+        <a className="text-copper-bright hover:underline" href={site.npmModel}>
+          @typedantic/model
+        </a>
+        {" · "}
+        <a className="text-copper-bright hover:underline" href={site.npmCore}>
+          core
+        </a>
+        {" · "}
+        <a className="text-copper-bright hover:underline" href={site.npmSettings}>
+          settings
         </a>
       </p>
     </div>

@@ -1,6 +1,6 @@
 export const examples = {
   user: `import "reflect-metadata";
-import { BaseModel, Field, modelConfig } from "typedantic";
+import { BaseModel, Field, modelConfig } from "@typedantic/model";
 
 @modelConfig({ extra: "forbid" })
 class User extends BaseModel {
@@ -23,7 +23,9 @@ const user = User.modelValidate({
 console.log(user.modelDump());
 // { name: "Ada", age: 36, active: true }`,
 
-  collections: `class Order extends BaseModel {
+  collections: `import { BaseModel, Field } from "@typedantic/model";
+
+class Order extends BaseModel {
   @Field({ type: Array, items: String, minLength: 1 })
   tags!: string[];
 
@@ -36,7 +38,9 @@ Order.modelValidate({
   scores: { qa: 10 },
 });`,
 
-  unions: `class Cat extends BaseModel {
+  unions: `import { BaseModel, Field } from "@typedantic/model";
+
+class Cat extends BaseModel {
   @Field({ literal: "cat" })
   kind!: "cat";
   @Field({ type: Boolean })
@@ -58,7 +62,9 @@ class Shelter extends BaseModel {
 Shelter.modelValidate({ pet: { kind: "dog", barks: true } });
 // unknown tag "bird" → ValidationError`,
 
-  numbers: `class Rating extends BaseModel {
+  numbers: `import { BaseModel, Field } from "@typedantic/model";
+
+class Rating extends BaseModel {
   @Field({ type: Number, ge: 0 })          // int
   stars!: number;
 
@@ -70,43 +76,172 @@ Rating.modelValidate({ stars: 5, score: 4.5 });
 // stars: 1.5 fails — Number maps to int
 // score: 1.25 fails — not a multiple of 0.5`,
 
-  settings: `import { Field } from "typedantic";
-import { BaseSettings, settingsConfig } from "typedantic-settings";
+  settings: `import { Field } from "@typedantic/model";
+import { BaseSettings, settingsConfig } from "@typedantic/settings";
 
-@settingsConfig({ envPrefix: "APP_", extra: "forbid" })
+@settingsConfig({ envPrefix: "APP_", envFile: false, extra: "forbid" })
 class AppSettings extends BaseSettings {
-  @Field({ type: String, minLength: 1 })
+  @Field({ type: String, minLength: 1, alias: "HOST" })
   host!: string;
 
-  @Field({ type: Number, default: 8080 })
+  @Field({ type: Number, default: 8080, alias: "PORT" })
   port!: number;
 }
 
-const settings = AppSettings.settingsValidate();
-// APP_HOST=0.0.0.0  APP_PORT=3000`,
+const settings = AppSettings.settingsValidate({
+  APP_HOST: "0.0.0.0",
+  APP_PORT: "3000",
+});`,
 
-  core: `import { SchemaValidator } from "@typedantic/core";
+  validators: `import { BaseModel, Field, fieldValidator, modelValidator } from "@typedantic/model";
 
-const v = new SchemaValidator({
-  type: "array",
-  itemsSchema: { type: "string", minLength: 1 },
-  minLength: 1,
+class Product extends BaseModel {
+  @Field({ type: String })
+  sku!: string;
+
+  @Field({ type: Number, ge: 0 })
+  price!: number;
+
+  @fieldValidator("sku", { mode: "after" })
+  static upperSku(value: unknown) {
+    return typeof value === "string" ? value.toUpperCase() : value;
+  }
+
+  @modelValidator({ mode: "after" })
+  static check(data: unknown) {
+    const d = data as { price?: number };
+    if (d.price !== undefined && d.price > 1_000_000) {
+      throw new Error("price too high");
+    }
+    return data;
+  }
+}`,
+
+  serializers: `import {
+  BaseModel,
+  Field,
+  fieldSerializer,
+  computedField,
+} from "@typedantic/model";
+
+class Item extends BaseModel {
+  @Field({ type: String })
+  name!: string;
+
+  @Field({ type: Number })
+  qty!: number;
+
+  @computedField()
+  get label(): string {
+    return \`\${this.name}×\${this.qty}\`;
+  }
+
+  @fieldSerializer("name")
+  static upper(value: unknown) {
+    return typeof value === "string" ? value.toUpperCase() : value;
+  }
+}
+
+const item = Item.modelValidate({ name: "tea", qty: 2 });
+item.modelDump();     // { name: "TEA", qty: 2, label: "tea×2" }
+item.modelDumpJson(); // JSON mode`,
+
+  annotated: `import { BaseModel, Field, EmailStr, PositiveInt, SecretStr } from "@typedantic/model";
+
+class Account extends BaseModel {
+  @Field({ type: EmailStr })
+  email!: string;
+
+  @Field({ type: PositiveInt })
+  seats!: number;
+
+  @Field({ type: SecretStr })
+  apiKey!: SecretStr;
+}
+
+const a = Account.modelValidate({
+  email: "ada@example.com",
+  seats: 3,
+  apiKey: "sk-live-…",
 });
+a.apiKey.getSecretValue();
+a.modelDumpJson(); // apiKey → "**********"`,
 
+  rootModel: `import { RootModel } from "@typedantic/model";
+import type { FieldInfo } from "@typedantic/model";
+
+class IntList extends RootModel<number[]> {
+  static rootType: FieldInfo = { type: Array, items: Number };
+  root!: number[];
+}
+
+const list = IntList.modelValidate([1, 2, 3]);
+list.modelDump(); // [1, 2, 3]`,
+
+  createModel: `import { createModel } from "@typedantic/model";
+
+const User = createModel(
+  "User",
+  {
+    name: { type: String, minLength: 1 },
+    age: { type: Number, ge: 0 },
+  },
+  { extra: "forbid" },
+);
+
+User.modelValidate({ name: "Ada", age: 36 });`,
+
+  typeAdapter: `import { TypeAdapter, EmailStr } from "@typedantic/model";
+
+const emails = new TypeAdapter(EmailStr);
+emails.validate("ada@example.com");
+emails.validateJson('"ada@example.com"');`,
+
+  core: `import { SchemaValidator, toJsonSchema } from "@typedantic/core";
+
+const schema = {
+  type: "array" as const,
+  itemsSchema: { type: "string" as const, minLength: 1 },
+  minLength: 1,
+};
+
+const v = new SchemaValidator(schema);
 v.validateModel(["ok"]);
-v.validateJson('["ok"]');`,
+v.validateJson('["ok"]');
+toJsonSchema(schema, { title: "Tags" });`,
 
-  error: `try {
+  error: `import { ValidationError } from "@typedantic/model";
+
+try {
   User.modelValidate({ name: "", age: -1, active: true });
 } catch (err) {
   if (err instanceof ValidationError) {
     console.log(err.toObject());
-    // {
-    //   detail: [
-    //     { type: "string_too_short", location: ["name"], message: "… at least 1 …" },
-    //     { type: "int_greater_than_equal", location: ["age"], message: "… >= 0" }
-    //   ]
-    // }
+    // detail entries include location/message and FastAPI loc/msg aliases
   }
 }`,
+
+  settingsSources: `import { Field } from "@typedantic/model";
+import {
+  BaseSettings,
+  settingsConfig,
+  settingsCustomiseSources,
+  jsonFileSettingsSource,
+} from "@typedantic/settings";
+
+@settingsCustomiseSources((init, env, dotenv) => [
+  init,
+  env,
+  dotenv,
+  jsonFileSettingsSource("settings.json"),
+])
+@settingsConfig({ envPrefix: "APP_", envFile: false })
+class AppSettings extends BaseSettings {
+  @Field({ type: String, alias: "HOST" })
+  host!: string;
+}
+
+AppSettings.settingsValidate(process.env, {
+  initData: { host: "override" },
+});`,
 } as const;

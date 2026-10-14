@@ -8,7 +8,7 @@ export default function SettingsPage() {
   return (
     <DocShell
       title="Settings"
-      lead="BaseSettings is a BaseModel that reads the environment."
+      lead="BaseSettings is a BaseModel that loads configuration through a pluggable source pipeline."
     >
       <CodeBlock code={examples.settings} />
       <table>
@@ -60,11 +60,23 @@ export default function SettingsPage() {
             </td>
             <td>Match env keys ignoring case</td>
           </tr>
+          <tr>
+            <td>
+              <code>secretsDir</code>
+            </td>
+            <td>unset</td>
+            <td>Directory of secret files (lowest priority)</td>
+          </tr>
         </tbody>
       </table>
+      <h2>Custom sources</h2>
+      <CodeBlock code={examples.settingsSources} />
       <p>
-        Process environment wins over the file. Values are parsed as JSON when they look like JSON,
-        otherwise left as strings and then validated by the field schema.
+        Default priority (highest first): init → env → dotenv. Coercion uses field schema types so
+        string fields keep values like <code>&quot;007&quot;</code>.
+      </p>
+      <p>
+        Task recipe: <a href="/docs/howto/settings">How to load from the env</a>.
       </p>
     </DocShell>
   );

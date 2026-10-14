@@ -8,18 +8,15 @@ export default function InstallPage() {
   return (
     <DocShell
       title="Installation"
-      lead="Node 20 or newer. Bun is the canonical toolchain in the monorepo; npm and pnpm work for consumers."
+      lead="Node 20 or newer. The unscoped name typedantic is taken on npm — install the scoped packages."
     >
-      <h2>Packages</h2>
+      <h2>Application package</h2>
       <InstallTabs />
       <p className="mt-6">
-        <code>typedantic</code> depends on <code>@typedantic/core</code>. Add{" "}
-        <code>typedantic-settings</code> if you need env loading.
+        <code>@typedantic/model</code> depends on <code>@typedantic/core</code>. Add settings when you
+        need env loading:
       </p>
-      <CodeBlock
-        label="optional"
-        code={`bun add typedantic-settings`}
-      />
+      <CodeBlock label="optional" code={`bun add @typedantic/settings`} />
       <h2>TypeScript config</h2>
       <p>Decorators and metadata are required for Field inference:</p>
       <CodeBlock

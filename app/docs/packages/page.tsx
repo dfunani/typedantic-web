@@ -7,10 +7,10 @@ export default function PackagesPage() {
   return (
     <DocShell
       title="Packages"
-      lead="A Bun workspace. Downstream packages import built dist, so always build before testing consumers."
+      lead="A Bun workspace. Downstream packages import built dist — always build before testing consumers."
     >
       <pre className="mb-8 overflow-x-auto rounded-xl border border-line bg-ink-2 p-4 font-mono text-sm text-paper-dim">
-        {`typedantic-settings  →  typedantic  →  @typedantic/core`}
+        {`@typedantic/settings  →  @typedantic/model  →  @typedantic/core`}
       </pre>
       <table>
         <thead>
@@ -36,10 +36,10 @@ export default function PackagesPage() {
           <code>@typedantic/core</code>
         </li>
         <li>
-          <code>typedantic</code>
+          <code>@typedantic/model</code>
         </li>
         <li>
-          <code>typedantic-settings</code>
+          <code>@typedantic/settings</code>
         </li>
       </ol>
       <h2>Tests</h2>

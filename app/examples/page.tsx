@@ -11,7 +11,7 @@ const items = [
   },
   {
     title: "Collections",
-    note: "array of strings, object of ints with key minLength.",
+    note: "array of strings, object of ints.",
     code: examples.collections,
   },
   {
@@ -20,18 +20,28 @@ const items = [
     code: examples.unions,
   },
   {
-    title: "int vs number",
-    note: "Number → int. type: 'number' is IEEE-754.",
-    code: examples.numbers,
+    title: "Validators & serializers",
+    note: "fieldValidator, computedField, fieldSerializer.",
+    code: examples.validators,
+  },
+  {
+    title: "Annotated types",
+    note: "EmailStr, PositiveInt, SecretStr.",
+    code: examples.annotated,
+  },
+  {
+    title: "RootModel",
+    note: "Non-object roots.",
+    code: examples.rootModel,
   },
   {
     title: "Settings",
-    note: "Prefix, .env, then modelValidate.",
+    note: "Prefix, aliases, settingsValidate.",
     code: examples.settings,
   },
   {
     title: "Core only",
-    note: "No BaseModel. Compile a schema and validate JSON.",
+    note: "SchemaValidator + toJsonSchema without BaseModel.",
     code: examples.core,
   },
 ] as const;
@@ -42,8 +52,8 @@ export default function ExamplesPage() {
       <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-copper">Examples</p>
       <h1 className="display mt-3 text-4xl text-paper">Copy, then break it.</h1>
       <p className="mt-4 max-w-2xl text-lg leading-8 text-paper-dim">
-        These are the same shapes as the functional tests in the library repo. Invalid input should
-        throw <span className="font-mono text-paper">ValidationError</span>.
+        Shapes aligned with the library&apos;s functional tests. Invalid input should throw{" "}
+        <span className="font-mono text-paper">ValidationError</span>.
       </p>
       <div className="mt-12 space-y-14">
         {items.map((item, index) => (

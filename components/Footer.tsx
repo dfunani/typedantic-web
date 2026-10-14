@@ -7,7 +7,7 @@ export function Footer() {
     <footer className="mt-24 border-t border-line">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-4">
         <div>
-          <p className="display text-lg text-paper">typedantic</p>
+          <p className="display text-lg text-paper">Typedantic</p>
           <p className="mt-3 max-w-xs text-sm leading-6 text-muted">
             {site.tagline} Open source, MIT, Node {site.node}.
           </p>

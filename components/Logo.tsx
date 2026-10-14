@@ -10,7 +10,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       </span>
       {!compact && (
         <span className="display text-[1.15rem] tracking-tight text-paper">
-          typedantic
+          Typedantic
         </span>
       )}
     </Link>
