@@ -41,10 +41,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${fraunces.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col text-paper">
+      <body className="flex min-h-full flex-col text-paper antialiased">
         <div className="grain" aria-hidden />
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="relative z-0 flex-1">{children}</main>
         <Footer />
       </body>
     </html>

@@ -1,19 +1,21 @@
 @import "tailwindcss";
 
+/* Signal dark — cool ink, chalk type, lime accent (high contrast). */
 :root {
-  --ink: #0c0b09;
-  --ink-2: #141311;
-  --ink-3: #1c1a17;
-  --paper: #f3ece0;
-  --paper-dim: #cfc6b8;
-  --muted: #9a9084;
-  --line: rgba(243, 236, 224, 0.1);
-  --line-strong: rgba(243, 236, 224, 0.18);
-  --copper: #e07a3d;
-  --copper-bright: #f3a06a;
-  --copper-dim: rgba(224, 122, 61, 0.14);
-  --sage: #9bb38a;
-  --danger: #e06b5c;
+  --ink: #070b10;
+  --ink-2: #101820;
+  --ink-3: #182430;
+  --paper: #f4f7fb;
+  --paper-dim: #c5ceda;
+  --muted: #8b97a8;
+  --line: rgba(244, 247, 251, 0.14);
+  --line-strong: rgba(244, 247, 251, 0.28);
+  --copper: #c8f042;
+  --copper-bright: #ddff6a;
+  --copper-dim: rgba(200, 240, 66, 0.14);
+  --sage: #5eead4;
+  --danger: #ff6b7a;
+  --glow: rgba(200, 240, 66, 0.22);
 }
 
 @theme inline {
@@ -24,6 +26,7 @@
   --color-paper-dim: var(--paper-dim);
   --color-muted: var(--muted);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-copper: var(--copper);
   --color-copper-bright: var(--copper-bright);
   --color-copper-dim: var(--copper-dim);
@@ -43,9 +46,9 @@ html {
 body {
   min-height: 100%;
   background:
-    radial-gradient(1200px 600px at 80% -10%, rgba(224, 122, 61, 0.12), transparent 55%),
-    radial-gradient(900px 500px at -10% 20%, rgba(155, 179, 138, 0.06), transparent 50%),
-    var(--ink);
+    radial-gradient(900px 480px at 85% -5%, var(--glow), transparent 55%),
+    radial-gradient(700px 420px at -5% 15%, rgba(94, 234, 212, 0.1), transparent 50%),
+    linear-gradient(180deg, #0c1218 0%, var(--ink) 42%, var(--ink) 100%);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
@@ -54,8 +57,8 @@ body {
   position: fixed;
   inset: 0;
   z-index: 50;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
+  opacity: 0.03;
+  mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -63,9 +66,52 @@ body {
   font-family: var(--font-display), Georgia, serif;
 }
 
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes accent-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-rise {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-rise-delay {
+  animation: rise-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.hero-rise-delay-2 {
+  animation: rise-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+
+.accent-dot {
+  animation: accent-pulse 2.8s ease-in-out infinite;
+}
+
 .rule {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+.surface {
+  background: color-mix(in srgb, var(--ink-2) 92%, var(--copper) 8%);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), 0 18px 50px rgba(0, 0, 0, 0.35);
 }
 
 .prose-docs {
@@ -120,14 +166,16 @@ body {
 .prose-docs code {
   font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
   font-size: 0.86em;
-  color: var(--paper);
+  color: var(--copper-bright);
   background: var(--copper-dim);
+  border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
   border-radius: 4px;
   padding: 0.1em 0.35em;
 }
 
 .prose-docs pre code {
   background: transparent;
+  border: none;
   padding: 0;
   color: inherit;
 }

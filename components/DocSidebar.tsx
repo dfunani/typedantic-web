@@ -23,8 +23,8 @@ export function DocSidebar() {
                     href={item.href}
                     className={`block rounded-md px-2 py-1 text-sm ${
                       active
-                        ? "bg-copper-dim text-paper"
-                        : "text-paper-dim hover:text-paper"
+                        ? "bg-copper-dim font-medium text-copper-bright"
+                        : "text-paper-dim hover:bg-ink-3 hover:text-paper"
                     }`}
                   >
                     {item.label}
