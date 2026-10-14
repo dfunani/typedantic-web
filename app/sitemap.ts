@@ -30,7 +30,7 @@ const paths = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return paths.map((path) => ({
-    url: `https://typedantic.dev${path}`,
+    url: `https://typedantic-web.vercel.app${path}`,
     lastModified: new Date(),
   }));
 }

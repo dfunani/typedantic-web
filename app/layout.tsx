@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: `%s · ${site.name}`,
   },
   description: site.description,
-  metadataBase: new URL("https://typedantic.dev"),
+  metadataBase: new URL("https://typedantic-web.vercel.app"),
   openGraph: {
     title: site.name,
     description: site.description,
